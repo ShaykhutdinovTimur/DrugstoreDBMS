@@ -37,6 +37,7 @@ CREATE TABLE Medicines(
 	FullName VARCHAR(50) NOT NULL,
 	Gid INT NOT NULL,
 	IndicationMethod VARCHAR(1000) NOT NULL,
+	Patented boolean NOT NULL,
 	
 	FOREIGN KEY (Gid) REFERENCES GroupsOfDrugs(Id) ON DELETE CASCADE
 );
@@ -67,8 +68,8 @@ DROP TABLE IF EXISTS DrugArrangements CASCADE;
 CREATE TABLE DrugArrangements(
 	Id INT PRIMARY KEY,
 	Form varchar(50) NOT NULL,
-	AIWPI INT NOT NULL,
-	ItemsInBox INT NOT NULL,
+	AIWPI REAL NOT NULL,
+	ItemsInBox INT NOT NULL CHECK (ItemsInBox > 0),
 	Mid INT NOT NULL,
 	
 	FOREIGN KEY (Mid) REFERENCES Medicines(Id) ON DELETE CASCADE		
@@ -79,7 +80,7 @@ CREATE TABLE OrdersAmounts(
 	Aid INT,
 	LocalId INT,
 	Did INT,
-	Ccount INT NOT NULL,
+	Ccount INT NOT NULL CHECK (Ccount > 0),
 	
 	PRIMARY KEY (Aid, LocalId, Did),
 	FOREIGN KEY (Aid) REFERENCES DrugArrangements(Id) ON DELETE CASCADE,
@@ -90,8 +91,8 @@ DROP TABLE IF EXISTS StoresAmounts CASCADE;
 CREATE TABLE StoresAmounts(
 	Aid INT,
 	Did INT,
-	Ccount INT NOT NULL,
-	Price INT NOT NULL,
+	Ccount INT NOT NULL CHECK (Ccount > 0),
+	Price REAL NOT NULL CHECK (Price > 0),
 
 	PRIMARY KEY (Aid, Did),
 	FOREIGN KEY (Aid) REFERENCES DrugArrangements(Id) ON DELETE CASCADE,
